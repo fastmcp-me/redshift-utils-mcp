@@ -1,6 +1,6 @@
-# Redshift Admin MCP Server
+# Redshift Utils MCP Server
 
-![Redshift Admin MCP Server Banner](docs/banner.png)
+![Redshift Utils MCP Server Banner](docs/banner.png)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Overview
@@ -13,18 +13,17 @@ This server is for developers, data analysts, or teams looking to integrate LLM 
 
 ## Table of Contents
 
-- [Redshift Admin MCP Server](#redshift-admin-mcp-server)
+- [Redshift Utils MCP Server](#redshift-utils-mcp-server)
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
   - [Configuration](#configuration)
-  - [Usage / Quickstart](#usage--quickstart)
-  - [MCP Integration](#mcp-integration)
+  - [Usage](#usage)
+    - [Connecting with Claude Desktop / Anthropic Console:](#connecting-with-claude-desktop--anthropic-console)
+    - [Connecting with Cursor IDE:](#connecting-with-cursor-ide)
     - [Available MCP Resources](#available-mcp-resources)
     - [Available MCP Tools](#available-mcp-tools)
-  - [Development](#development)
   - [TO DO](#to-do)
   - [Contributing](#contributing)
   - [License](#license)
@@ -47,10 +46,7 @@ This server is for developers, data analysts, or teams looking to integrate LLM 
 
 ## Prerequisites
 
-Clearly list all requirements needed before a user can install and run the server. This prevents setup failures and frustration.
-
 Software:
-
 *   Python 3.8+
 *   `uv` (recommended package manager)
 *   Git (for cloning the repository)
@@ -73,27 +69,7 @@ Your Redshift connection details are managed via AWS Secrets Manager, and the se
 
 These details will be configured via environment variables as detailed in the [Configuration](#configuration) section.
 
-## Installation
-
-Provide clear, simple, step-by-step instructions for installation. Prioritize the easiest method for end-users if multiple options exist.
-
-Option 1: From Source
-
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-    cd YOUR_REPO
-    ```
-
-2.  Install dependencies using `uv`:
-    ```bash
-    uv sync
-    ```
-
-
 ## Configuration
-
-Explain how to configure the server, focusing on the required Redshift connection details. Using environment variables is the standard and recommended approach for sensitive data like credentials.
 
 Set Environment Variables:
 This server requires the following environment variables to connect to your Redshift cluster via the AWS Data API. You can set these directly in your shell, using a systemd service file, a Docker environment file, or by creating a `.env` file in the project's root directory (if using a tool like `uv` or `python-dotenv` that supports loading from `.env`).
@@ -132,52 +108,17 @@ Required Variables Table:
 
 *Note: Ensure the AWS credentials used by Boto3 (via environment, profile, or IAM role) have permissions to access the specified `REDSHIFT_SECRET_ARN` and use the Redshift Data API (`redshift-data:*`).*
 
-## Usage / Quickstart
+## Usage
 
-Provide the command(s) needed to start the server after installation and configuration. Include expected output or a simple test to verify it's running correctly.
-
-Starting the Server:
-
-If installed from source:
-```bash
-# Ensure environment variables are set or .env file is present and loaded by your shell/uv
-python -m redshift_utils_mcp
-# Or using uv:
-# uv run python -m redshift_utils_mcp
-```
-
-Verification:
-Upon successful startup, you should see log messages indicating the server is running and validating configuration. If configuration is valid, it will indicate it's ready. Example (actual output will vary):
-
-```
-INFO: Configuring Redshift Admin MCP Server...
-INFO: Using Cluster ID from argument/env: your-cluster-id
-INFO: Using Database from argument/env: your_database_name
-INFO: Using Secret ARN from argument/env: arn:aws:secretsmanager:...
-INFO: Using AWS Region from argument/env: us-east-1
-INFO: Configuration loaded. Starting MCP server...
-INFO: Validating Redshift Data API configuration...
-INFO: Configuration validated successfully.
-INFO: Redshift Utils MCP Server shutting down. # This message appears after validation in lifespan
-INFO: MCP server finished. # This appears after the lifespan context exits in __main__
-```
-*(Note: The lifespan check runs and exits before the server fully starts listening for stdio connections in the current structure, but it validates the config)*
-
-The server runs via standard input/output (stdio) and is designed to be launched by an MCP client.
-
-## MCP Integration
-
-Explain how users can connect this server to their MCP-compatible clients (like Claude Desktop, Cursor IDE, or custom applications). Providing ready-to-use configuration snippets is highly beneficial.
-
-Connecting with Claude Desktop / Anthropic Console:
-Add the following configuration block to your `claude_desktop_config.json` file (you can typically find this file in the application support directory for Claude). Adjust `command`, `args`, `env`, and `workingDirectory` based on your installation method and setup.
+### Connecting with Claude Desktop / Anthropic Console:
+Add the following configuration block to your `mcp.json` file. Adjust `command`, `args`, `env`, and `workingDirectory` based on your installation method and setup.
 
 ```json
 {
   "mcpServers": {
     "redshift-utils-mcp": {
       "command": "uvx",
-      "args": ["run", "redshift_utils_mcp"],
+      "args": ["redshift_utils_mcp"],
       "env": {
         "REDSHIFT_CLUSTER_ID":"your-cluster-id",
         "REDSHIFT_DATABASE":"your_database_name",
@@ -188,7 +129,7 @@ Add the following configuration block to your `claude_desktop_config.json` file 
 }
 ```
 
-Connecting with Cursor IDE:
+### Connecting with Cursor IDE:
 1.  Start the MCP server locally using the instructions in the [Usage / Quickstart](#usage--quickstart) section.
 2.  In Cursor, open the Command Palette (Cmd/Ctrl + Shift + P).
 3.  Type "Connect to MCP Server" or navigate to the MCP settings.
@@ -197,32 +138,8 @@ Connecting with Cursor IDE:
 6.  Enter the command and arguments required to start your server (`uvx run redshift_utils_mcp`). Ensure any necessary environment variables are available to the command being run.
 7.  Cursor should detect the server and its available tools/resources.
 
-Connecting with Custom Clients (using MCP SDKs):
-If you are building your own MCP client application using an official SDK (like `@modelcontextprotocol/sdk` for TypeScript/JavaScript or `mcp` for Python), you will typically connect using the `StdioClientTransport` (or equivalent) by pointing it to the command that starts this server.
-
-Example (Conceptual TypeScript):
-```typescript
-import { McpClient } from "@modelcontextprotocol/sdk/client";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio";
-
-const transport = new StdioClientTransport({
-  command: "python",
-  args: ["-m", "redshift_utils_mcp"],
-  // env: {... } // Optional environment variables
-});
-
-const client = new McpClient(transport);
-await client.connect();
-
-// Now you can interact with the server
-// const tools = await client.listTools();
-// console.log(tools);
-```
-Refer to the specific MCP SDK documentation for detailed client implementation guides.
-
 ### Available MCP Resources
 
-Resources are used by MCP clients to retrieve data or state from the server (analogous to HTTP GET requests). This server exposes the following resources related to your Redshift database:
 
 | Resource URI Pattern                     | Description                                                                               | Example URI                       |
 | :--------------------------------------- | :---------------------------------------------------------------------------------------- | :-------------------------------- |
@@ -236,56 +153,19 @@ Accessibility of schemas/tables depends on the permissions granted to the Redshi
 
 ### Available MCP Tools
 
-Tools are used by MCP clients to request actions or computations from the server (analogous to HTTP POST requests). This server provides the following tools for interacting with Redshift:
 
-| Tool Name                           | Description                                                                                                  | Input Parameters (Name, Type, Required, Description)                                                                                                                                                    | Output Description                                                                                                                                                                       | Example Invocation (Conceptual)                                                                                                                     |
-| :---------------------------------- | :----------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `handle_check_cluster_health`       | Performs a health assessment of the Redshift cluster using a set of diagnostic SQL scripts.                  | `level` (string, No, 'Level of detail: "basic" or "full"'), `time_window_days` (integer, No, 'Lookback period in days for time-sensitive checks')                                                       | Dictionary mapping script names to results (list of dicts) or Exception objects.                                                                                                         | `use_mcp_tool("redshift-admin", "handle_check_cluster_health", {"level": "full", "time_window_days": 7})`                                           |
-| `handle_diagnose_locks`             | Identifies active lock contention and blocking sessions in the cluster.                                      | `target_pid` (integer, No, 'Filter by process ID'), `target_table_name` (string, No, 'Filter by table name'), `min_wait_seconds` (integer, No, 'Minimum seconds a lock must be waiting to be included') | List of dictionaries, where each dictionary represents a row from the lock contention query result.                                                                                      | `use_mcp_tool("redshift-admin", "handle_diagnose_locks", {"min_wait_seconds": 10})`                                                                 |
-| `handle_diagnose_query_performance` | Analyzes a specific query's execution performance, including plan, metrics, and historical data.             | `query_id` (integer, Yes, 'The numeric ID of the Redshift query to analyze'), `compare_historical` (boolean, No, 'Fetch performance data for previous runs of the same query text')                     | Dictionary mapping script names to results (list of dicts) or Exception objects.                                                                                                         | `use_mcp_tool("redshift-admin", "handle_diagnose_query_performance", {"query_id": 12345, "compare_historical": true})`                              |
-| `handle_execute_ad_hoc_query`       | Executes an arbitrary SQL query provided by the user via Redshift Data API. Designed as an escape hatch.     | `sql_query` (string, Yes, 'The exact SQL query string to execute.')                                                                                                                                     | Dictionary with `status`, `columns`, `rows`, `row_count` on success, or raises an exception on failure.                                                                                  | `use_mcp_tool("redshift-admin", "handle_execute_ad_hoc_query", {"sql_query": "SELECT COUNT(*) FROM users WHERE registration_date > '2023-01-01'"})` |
-| `handle_get_table_definition`       | Retrieves the DDL (Data Definition Language) statement (`SHOW TABLE`) for a specific table.                  | `schema_name` (string, Yes, 'The schema name of the table.'), `table_name` (string, Yes, 'The name of the table.')                                                                                      | String containing the CREATE TABLE statement (DDL) or raises an exception if not found or an error occurs.                                                                               | `use_mcp_tool("redshift-admin", "handle_get_table_definition", {"schema_name": "public", "table_name": "products"})`                                |
-| `handle_inspect_table`              | Retrieves detailed information about a specific Redshift table, covering design, storage, health, and usage. | `schema_name` (string, Yes, 'The schema name of the table.'), `table_name` (string, Yes, 'The name of the table.')                                                                                      | A dictionary where keys are script names and values are either the raw list of dictionary results, the extracted DDL string, or an Exception object if that specific script failed.      | `use_mcp_tool("redshift-admin", "handle_inspect_table", {"schema_name": "analytics", "table_name": "user_sessions"})`                               |
-| `handle_monitor_workload`           | Analyzes cluster workload patterns over a specified time window using various diagnostic scripts.            | `time_window_days` (integer, No, 'Lookback period in days for the workload analysis.'), `top_n_queries` (integer, No, 'Number of top queries (by total execution time) to consider')                    | A dictionary where keys are script names (e.g., 'workload/top_queries.sql') and values are either a list of result rows (as dictionaries) or the Exception object if that script failed. | `use_mcp_tool("redshift-admin", "handle_monitor_workload", {"time_window_days": 7, "top_n_queries": 20})`                                           |
 
-Tool names and parameters must match the server's implementation exactly.
-Ensure the Redshift user configured via `REDSHIFT_SECRET_ARN` has the necessary permissions for the tools you intend to use.
+| Tool Name                           | Description                                                                                                  | Key Parameters (Required*)                                | Example Invocation                                                                              |
+| :---------------------------------- | :----------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :---------------------------------------------------------------------------------------------- |
+| `handle_check_cluster_health`       | Performs a health assessment of the Redshift cluster using a set of diagnostic SQL scripts.                  | `level` (optional), `time_window_days` (optional)         | `use_mcp_tool("redshift-admin", "handle_check_cluster_health", {"level": "full"})`              |
+| `handle_diagnose_locks`             | Identifies active lock contention and blocking sessions in the cluster.                                      | `min_wait_seconds` (optional)                             | `use_mcp_tool("redshift-admin", "handle_diagnose_locks", {"min_wait_seconds": 10})`             |
+| `handle_diagnose_query_performance` | Analyzes a specific query's execution performance, including plan, metrics, and historical data.             | `query_id`*                                               | `use_mcp_tool("redshift-admin", "handle_diagnose_query_performance", {"query_id": 12345})`      |
+| `handle_execute_ad_hoc_query`       | Executes an arbitrary SQL query provided by the user via Redshift Data API. Designed as an escape hatch.     | `sql_query`*                                              | `use_mcp_tool("redshift-admin", "handle_execute_ad_hoc_query", {"sql_query": "SELECT ..."})`    |
+| `handle_get_table_definition`       | Retrieves the DDL (Data Definition Language) statement (`SHOW TABLE`) for a specific table.                  | `schema_name`*, `table_name`*                             | `use_mcp_tool("redshift-admin", "handle_get_table_definition", {"schema_name": "public", ...})` |
+| `handle_inspect_table`              | Retrieves detailed information about a specific Redshift table, covering design, storage, health, and usage. | `schema_name`*, `table_name`*                             | `use_mcp_tool("redshift-admin", "handle_inspect_table", {"schema_name": "analytics", ...})`     |
+| `handle_monitor_workload`           | Analyzes cluster workload patterns over a specified time window using various diagnostic scripts.            | `time_window_days` (optional), `top_n_queries` (optional) | `use_mcp_tool("redshift-admin", "handle_monitor_workload", {"time_window_days": 7})`            |
 
-## Development
 
-Instructions for developers who want to contribute to or modify this project.
-
-Prerequisites: Ensure you have completed the [Installation](#installation) steps (using the "From Source" method) and have all [Prerequisites](#prerequisites) met.
-
-Install Development Dependencies:
-This project uses `uv` and dependencies are managed via `pyproject.toml`. Development dependencies are likely in a `[project.optional-dependencies.dev]` group.
-```bash
-uv sync --dev
-```
-
-Running Tests:
-This project uses `pytest` for testing.
-```bash
-pytest
-```
-
-Code Style & Linting:
-
-This project uses `ruff` for code formatting and linting.
-Please format your code before committing:
-```bash
-ruff format .
-```
-Run the linter using:
-```bash
-ruff check .
-```
-(Optional) Consider setting up pre-commit hooks: (Not explicitly configured in provided files)
-
-Refer to the (CODE\_STYLE.md) file for detailed guidelines (if applicable).
-
-Building (if applicable):
-This is a Python project and does not require a separate build step before running.
 
 ## TO DO
 - [ ] Improve Prompt Options

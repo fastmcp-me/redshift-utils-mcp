@@ -27,7 +27,7 @@ dependencies = [
 ]
 
 [project.scripts]
-redshift-utils-mcp-server = "redshift_utils_mcp.__main__:app"
+redshift-utils-mcp = "redshift_utils_mcp.__main__:app"
 
 [project.optional-dependencies]
 dev = [

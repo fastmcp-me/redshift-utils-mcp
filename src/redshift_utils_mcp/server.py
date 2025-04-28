@@ -21,7 +21,7 @@ from .utils.data_api import get_data_api_config, DataApiConfigError
 
 
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
     stream=sys.stderr,
 )
@@ -57,7 +57,7 @@ async def server_lifespan(mcp: "FastMCP") -> AsyncIterator[None]:
 
 mcp: FastMCP = FastMCP(
     name="Redshift Utils MCP Server",
-    version="0.3.0",
+    version="0.3.1",
     description="MCP server using Redshift Data API for diagnostics and administration.",
     lifespan=server_lifespan,
 )
