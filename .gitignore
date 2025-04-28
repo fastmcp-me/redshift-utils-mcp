@@ -133,5 +133,3 @@ cython_debug/
 
 # VSCode settings
 .vscode/
-.roo/
-.roomodes
