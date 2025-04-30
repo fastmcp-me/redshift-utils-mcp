@@ -2,10 +2,10 @@
 <div align="center">
   <!-- Container for side-by-side images -->
   <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
-    <img src="docs/banner.png" width="400">
+    <img src="docs/banner.png" width="320">
     
  <a href="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp">
-      <img width="500" src="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp/badge" alt="redshift-utils-mcp MCP server" />
+      <img width="400" src="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp/badge" alt="redshift-utils-mcp MCP server" />
   </div>
   
   <!-- Stats in a clean format -->
