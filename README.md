@@ -1,10 +1,19 @@
 # Redshift Utils MCP Server
-
-![Redshift Utils MCP Server Banner](docs/banner.png)
-<a href="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp">
-  <img width="380" height="200" src="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp/badge" alt="redshift-utils-mcp MCP server" />
-</a>
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<div align="center">
+  <!-- Container for side-by-side images -->
+  <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+    <img src="docs/banner.png" width="400">
+    
+ <a href="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp">
+      <img width="500" src="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp/badge" alt="redshift-utils-mcp MCP server" />
+  </div>
+  
+  <!-- Stats in a clean format -->
+  <p>
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
+    <img src="https://img.shields.io/badge/Language-Python-blue.svg" alt="Python">
+  </p>
+</div>
 
 ## Overview
 
