@@ -1,6 +1,9 @@
 # Redshift Utils MCP Server
 
 ![Redshift Utils MCP Server Banner](docs/banner.png)
+<a href="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@vinodismyname/redshift-utils-mcp/badge" alt="redshift-utils-mcp MCP server" />
+</a>
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## Overview
@@ -98,7 +101,7 @@ AWS_REGION="us-east-1" # Or AWS_DEFAULT_REGION
 Required Variables Table:
 
 | Variable Name         | Required | Description                                                      | Example Value                                                          |
-| :-------------------- | :------- | :--------------------------------------------------------------- | :--------------------------------------------------------------------- |
+| :-------------------- | :------- | :--------------------------------------------------------------- | :----------------------------------------------------------------------- |
 | `REDSHIFT_CLUSTER_ID` | Yes      | Your Redshift cluster identifier.                                | `my-redshift-cluster`                                                  |
 | `REDSHIFT_DATABASE`   | Yes      | The name of the database to connect to.                          | `mydatabase`                                                           |
 | `REDSHIFT_SECRET_ARN` | Yes      | AWS Secrets Manager ARN for Redshift credentials.                | `arn:aws:secretsmanager:us-east-1:123456789012:secret:mysecret-abcdef` |
@@ -140,7 +143,6 @@ Add the following configuration block to your `mcp.json` file. Adjust `command`,
 
 ### Available MCP Resources
 
-
 | Resource URI Pattern                     | Description                                                                               | Example URI                       |
 | :--------------------------------------- | :---------------------------------------------------------------------------------------- | :-------------------------------- |
 | `/scripts/{script_path}`                 | Retrieves the raw content of a SQL script file from the server's `sql_scripts` directory. | `/scripts/health/disk_usage.sql`  |
@@ -153,8 +155,6 @@ Accessibility of schemas/tables depends on the permissions granted to the Redshi
 
 ### Available MCP Tools
 
-
-
 | Tool Name                           | Description                                                                                                  | Key Parameters (Required*)                                | Example Invocation                                                                              |
 | :---------------------------------- | :----------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- | :---------------------------------------------------------------------------------------------- |
 | `handle_check_cluster_health`       | Performs a health assessment of the Redshift cluster using a set of diagnostic SQL scripts.                  | `level` (optional), `time_window_days` (optional)         | `use_mcp_tool("redshift-admin", "handle_check_cluster_health", {"level": "full"})`              |
@@ -164,8 +164,6 @@ Accessibility of schemas/tables depends on the permissions granted to the Redshi
 | `handle_get_table_definition`       | Retrieves the DDL (Data Definition Language) statement (`SHOW TABLE`) for a specific table.                  | `schema_name`*, `table_name`*                             | `use_mcp_tool("redshift-admin", "handle_get_table_definition", {"schema_name": "public", ...})` |
 | `handle_inspect_table`              | Retrieves detailed information about a specific Redshift table, covering design, storage, health, and usage. | `schema_name`*, `table_name`*                             | `use_mcp_tool("redshift-admin", "handle_inspect_table", {"schema_name": "analytics", ...})`     |
 | `handle_monitor_workload`           | Analyzes cluster workload patterns over a specified time window using various diagnostic scripts.            | `time_window_days` (optional), `top_n_queries` (optional) | `use_mcp_tool("redshift-admin", "handle_monitor_workload", {"time_window_days": 7})`            |
-
-
 
 ## TO DO
 - [ ] Improve Prompt Options
@@ -183,7 +181,6 @@ Security is critical when providing database access via an MCP server. Please co
 🔒 **Credentials Management:** This server uses AWS Secrets Manager via the Redshift Data API, which is a more secure approach than storing credentials directly in environment variables or configuration files. Ensure your AWS credentials used by Boto3 (via environment, profile, or IAM role) are managed securely and have the minimum necessary permissions. Never commit your AWS credentials or `.env` files containing secrets to version control.
 
 🛡️ **Principle of Least Privilege:** Configure the Redshift user whose credentials are in AWS Secrets Manager with the minimum permissions required for the server's intended functionality. For example, if only read access is needed, grant only `CONNECT` and `SELECT` privileges on the necessary schemas/tables and `SELECT` on the required system views. Avoid using highly privileged users like `admin` or the cluster superuser.
-
 
 For guidance on creating restricted Redshift users and managing permissions, refer to the official (https://docs.aws.amazon.com/redshift/latest/mgmt/security.html).
 
