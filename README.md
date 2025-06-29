@@ -130,7 +130,7 @@ Add the following configuration block to your `mcp.json` file. Adjust `command`,
   "mcpServers": {
     "redshift-utils-mcp": {
       "command": "uvx",
-      "args": ["redshift_utils_mcp"],
+      "args": ["redshift-utils-mcp"],
       "env": {
         "REDSHIFT_CLUSTER_ID":"your-cluster-id",
         "REDSHIFT_DATABASE":"your_database_name",
@@ -139,6 +139,18 @@ Add the following configuration block to your `mcp.json` file. Adjust `command`,
       }
   }
 }
+```
+
+### Connecting with Claude Code CLI:
+Use the Claude CLI to add the server configuration:
+
+```bash
+claude mcp add redshift-utils-mcp \
+  -e REDSHIFT_CLUSTER_ID="your-cluster-id" \
+  -e REDSHIFT_DATABASE="your_database_name" \
+  -e REDSHIFT_SECRET_ARN="arn:aws:secretsmanager:..." \
+  -e AWS_REGION="us-east-1" \
+  -- uvx redshift-utils-mcp
 ```
 
 ### Connecting with Cursor IDE:
