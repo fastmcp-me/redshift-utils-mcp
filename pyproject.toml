@@ -1,7 +1,6 @@
 [project]
 name = "redshift-utils-mcp"
-# Version updated based on server.py example in Tech Plan (line 420)
-version = "0.3.1"
+dynamic = ["version"]
 description = "A Python-based MCP server for database actions on Amazon Redshift using the Data API"
 authors = [
     {name = "Vinod", email = "vinodismyname@users.noreply.github.com"}
