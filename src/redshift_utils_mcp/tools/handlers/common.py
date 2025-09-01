@@ -1,6 +1,7 @@
 """Shared TypedDicts, Exceptions, and Imports for tool handlers."""
 
-from typing import Dict, Any, List, Optional, TypedDict, Union
+from typing import Dict, Any, List, Optional, Union
+from typing_extensions import TypedDict
 
 
 class QueryNotFound(Exception):

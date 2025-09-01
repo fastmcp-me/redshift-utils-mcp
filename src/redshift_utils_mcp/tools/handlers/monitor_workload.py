@@ -3,7 +3,8 @@ MCP Tool Handler for Monitoring Redshift Workload Patterns.
 """
 
 import asyncio
-from typing import Dict, Any, List, Optional, Tuple, TypedDict, Union
+from typing import Dict, Any, List, Optional, Tuple, Union
+from typing_extensions import TypedDict
 from botocore.exceptions import ClientError
 from mcp.server.fastmcp import Context
 from ...server import mcp

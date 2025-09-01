@@ -1,4 +1,5 @@
-from typing import List, Dict, Any, Optional, Set, Union, TypedDict, cast
+from typing import List, Dict, Any, Optional, Set, Union, cast
+from typing_extensions import TypedDict
 
 
 class HealthCheckItem(TypedDict, total=False):
