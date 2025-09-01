@@ -493,7 +493,6 @@ wheels = [
 
 [[package]]
 name = "redshift-utils-mcp"
-version = "0.3.1"
 source = { editable = "." }
 dependencies = [
     { name = "boto3" },
