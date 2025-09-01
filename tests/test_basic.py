@@ -5,8 +5,12 @@ from redshift_utils_mcp import __version__
 
 
 def test_version():
-    """Test that version is defined."""
-    assert __version__ == "0.3.1"
+    """Test that version is defined and follows semver format."""
+    assert __version__ is not None
+    # Check it follows semver format (x.y.z)
+    parts = __version__.split(".")
+    assert len(parts) == 3
+    assert all(part.isdigit() for part in parts)
 
 
 def test_imports():
