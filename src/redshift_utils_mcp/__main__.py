@@ -150,19 +150,25 @@ def main(
 
     if missing_vars:
         # Use typer for more elegant error output
-        typer.echo(typer.style("Error: Missing required configuration!", fg=typer.colors.RED, bold=True))
-        typer.echo("\nPlease provide the following configuration items either via command-line arguments or environment variables:")
+        typer.echo(
+            typer.style(
+                "Error: Missing required configuration!", fg=typer.colors.RED, bold=True
+            )
+        )
+        typer.echo(
+            "\nPlease provide the following configuration items either via command-line arguments or environment variables:"
+        )
 
         # Map description back to CLI option for clarity
         config_map = {
             "REDSHIFT_CLUSTER_ID": "--cluster-id",
             "REDSHIFT_DATABASE": "--database",
             "REDSHIFT_SECRET_ARN": "--secret-arn",
-            "AWS_REGION/AWS_DEFAULT_REGION": "--region"
+            "AWS_REGION/AWS_DEFAULT_REGION": "--region",
         }
 
         for var_desc in missing_vars:
-            env_var_key = var_desc.split(" or ")[0] # Get the ENV VAR part
+            env_var_key = var_desc.split(" or ")[0]  # Get the ENV VAR part
             cli_opt = config_map.get(env_var_key)
 
             message = f"  - {typer.style(env_var_key, fg=typer.colors.YELLOW)} (Environment Variable)"
@@ -170,7 +176,9 @@ def main(
                 message += f" or {typer.style(cli_opt, fg=typer.colors.CYAN)} (Command-Line Argument)"
             typer.echo(message)
 
-        typer.echo(f"\nFor example, set {typer.style('REDSHIFT_CLUSTER_ID', fg=typer.colors.YELLOW)} or use {typer.style('--cluster-id', fg=typer.colors.CYAN)}.")
+        typer.echo(
+            f"\nFor example, set {typer.style('REDSHIFT_CLUSTER_ID', fg=typer.colors.YELLOW)} or use {typer.style('--cluster-id', fg=typer.colors.CYAN)}."
+        )
         raise typer.Exit(code=1)
 
     logger.info("Configuration loaded. Starting MCP server...")

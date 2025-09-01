@@ -8,7 +8,7 @@ from .data_api import (
     SqlExecutionError,
     DataApiTimeoutError,
     get_data_api_config,
-    execute_sql,  
+    execute_sql,
 )
 
 
