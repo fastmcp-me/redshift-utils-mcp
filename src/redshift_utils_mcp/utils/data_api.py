@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from typing import Optional, List, Dict, Any, Tuple
 
 import boto3
-from botocore.exceptions import ClientError
 
 
 class DataApiConfigError(ValueError):

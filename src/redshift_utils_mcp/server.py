@@ -63,7 +63,7 @@ mcp: FastMCP = FastMCP(
 )
 
 
-from .tools.handlers import (
+from .tools.handlers import (  # noqa: E402
     check_cluster_health,
     diagnose_locks,
     diagnose_query_performance,
@@ -74,10 +74,10 @@ from .tools.handlers import (
 )
 
 
-from .resources import handlers as resource_handlers
+from .resources import handlers as resource_handlers  # noqa: E402
 
 
-from .prompts import handlers as prompt_handlers
+from .prompts import handlers as prompt_handlers  # noqa: E402
 
 
 _ = (
