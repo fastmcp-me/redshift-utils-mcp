@@ -6,4 +6,4 @@ administrative actions for Amazon Redshift, leveraging SQL scripts from the
 awslabs/amazon-redshift-utils repository.
 """
 
-__version__ = "0.3.3"
+__version__ = "0.3.4"
