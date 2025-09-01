@@ -15,7 +15,7 @@ import sys
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP
 
 from .utils.data_api import get_data_api_config, DataApiConfigError
 

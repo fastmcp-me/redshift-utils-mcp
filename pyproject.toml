@@ -14,6 +14,7 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+keywords = ["mcp", "redshift", "aws", "database", "model-context-protocol"]
 # Dependencies updated based on Tech Plan Section 9
 dependencies = [
     "fastmcp>=2.2.5",
@@ -25,6 +26,12 @@ dependencies = [
     "pytest>=8.3.5",
     "pytest-asyncio>=0.26.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/vinodismyname/redshift-utils-mcp"
+Documentation = "https://github.com/vinodismyname/redshift-utils-mcp#readme"
+Repository = "https://github.com/vinodismyname/redshift-utils-mcp"
+Issues = "https://github.com/vinodismyname/redshift-utils-mcp/issues"
 
 [project.scripts]
 redshift-utils-mcp = "redshift_utils_mcp.__main__:app"
@@ -42,6 +49,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/redshift_utils_mcp"]
+
+[tool.hatch.version]
+path = "src/redshift_utils_mcp/__init__.py"
 
 [dependency-groups]
 dev = [

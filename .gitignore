@@ -133,3 +133,8 @@ cython_debug/
 
 # VSCode settings
 .vscode/
+.roo/
+.claude/
+.spec-workflow/
+.venv-test/
+CLAUDE.md

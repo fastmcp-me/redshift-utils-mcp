@@ -10,6 +10,9 @@
   
   <!-- Stats in a clean format -->
   <p>
+    <a href="https://pypi.org/project/redshift-utils-mcp/"><img src="https://img.shields.io/pypi/v/redshift-utils-mcp.svg" alt="PyPI version"></a>
+    <a href="https://pypi.org/project/redshift-utils-mcp/"><img src="https://img.shields.io/pypi/dm/redshift-utils-mcp.svg" alt="Downloads"></a>
+    <a href="https://pypi.org/project/redshift-utils-mcp/"><img src="https://img.shields.io/pypi/pyversions/redshift-utils-mcp.svg" alt="Python versions"></a>
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License">
     <img src="https://img.shields.io/badge/Language-Python-blue.svg" alt="Python">
   </p>
@@ -30,15 +33,17 @@ This server is for developers, data analysts, or teams looking to integrate LLM 
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
   - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+    - [Install from PyPI (Recommended)](#install-from-pypi-recommended)
+    - [Install from Source](#install-from-source)
   - [Configuration](#configuration)
   - [Usage](#usage)
     - [Connecting with Claude Desktop / Anthropic Console:](#connecting-with-claude-desktop--anthropic-console)
+    - [Connecting with Claude Code CLI:](#connecting-with-claude-code-cli)
     - [Connecting with Cursor IDE:](#connecting-with-cursor-ide)
     - [Available MCP Resources](#available-mcp-resources)
     - [Available MCP Tools](#available-mcp-tools)
   - [TO DO](#to-do)
-  - [Contributing](#contributing)
-  - [License](#license)
   - [References](#references)
 
 ## Features
@@ -59,9 +64,8 @@ This server is for developers, data analysts, or teams looking to integrate LLM 
 ## Prerequisites
 
 Software:
-*   Python 3.8+
-*   `uv` (recommended package manager)
-*   Git (for cloning the repository)
+*   Python 3.10+
+*   `uv` (recommended package manager) or `pip`
 
 Infrastructure & Access:
 
@@ -80,6 +84,36 @@ Your Redshift connection details are managed via AWS Secrets Manager, and the se
 *   Optionally, an AWS profile name if not using default credentials/region.
 
 These details will be configured via environment variables as detailed in the [Configuration](#configuration) section.
+
+## Installation
+
+### Install from PyPI (Recommended)
+
+The easiest way to install the Redshift Utils MCP Server is directly from PyPI:
+
+```bash
+# Using pip
+pip install redshift-utils-mcp
+
+# Using uv (recommended)
+uv pip install redshift-utils-mcp
+```
+
+### Install from Source
+
+Alternatively, you can install from the source repository:
+
+```bash
+# Clone the repository
+git clone https://github.com/vinodismyname/redshift-utils-mcp.git
+cd redshift-utils-mcp
+
+# Install using uv (recommended)
+uv sync
+
+# Or install using pip
+pip install -e .
+```
 
 ## Configuration
 
@@ -122,8 +156,18 @@ Required Variables Table:
 
 ## Usage
 
+After installation, you can run the server directly from the command line:
+
+```bash
+# If installed from PyPI
+redshift-utils-mcp
+
+# Or using uvx (no installation required)
+uvx redshift-utils-mcp
+```
+
 ### Connecting with Claude Desktop / Anthropic Console:
-Add the following configuration block to your `mcp.json` file. Adjust `command`, `args`, `env`, and `workingDirectory` based on your installation method and setup.
+Add the following configuration block to your `mcp.json` file:
 
 ```json
 {
@@ -190,24 +234,6 @@ Accessibility of schemas/tables depends on the permissions granted to the Redshi
 - [ ] Improve Prompt Options
 - [ ] Add support for more credential methods
 - [ ] Add Support for Redshift Serverless
-
-## Contributing
-
-Contributions are welcome! Please follow these guidelines.
-
-Find/Report Issues: Check the GitHub Issues page for existing bugs or feature requests. Feel free to open a new issue if needed.
-
-Security is critical when providing database access via an MCP server. Please consider the following:
-
-🔒 **Credentials Management:** This server uses AWS Secrets Manager via the Redshift Data API, which is a more secure approach than storing credentials directly in environment variables or configuration files. Ensure your AWS credentials used by Boto3 (via environment, profile, or IAM role) are managed securely and have the minimum necessary permissions. Never commit your AWS credentials or `.env` files containing secrets to version control.
-
-🛡️ **Principle of Least Privilege:** Configure the Redshift user whose credentials are in AWS Secrets Manager with the minimum permissions required for the server's intended functionality. For example, if only read access is needed, grant only `CONNECT` and `SELECT` privileges on the necessary schemas/tables and `SELECT` on the required system views. Avoid using highly privileged users like `admin` or the cluster superuser.
-
-For guidance on creating restricted Redshift users and managing permissions, refer to the official (https://docs.aws.amazon.com/redshift/latest/mgmt/security.html).
-
-## License
-
-This project is licensed under the MIT License. See the (LICENSE) file for details.
 
 ## References
 
